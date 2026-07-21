@@ -15,6 +15,8 @@ const app = express();
 // Security
 app.use(helmet());
 
+// CORS
+// CORS
 const allowedOrigins = [
   "http://localhost:3000",
   process.env.CLIENT_URL,
@@ -23,8 +25,11 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, callback) => {
+      if (!origin) {
+        return callback(null, true);
+      }
+
       if (
-        !origin ||
         allowedOrigins.includes(origin) ||
         origin.endsWith(".vercel.app")
       ) {
@@ -36,9 +41,6 @@ app.use(
     credentials: true,
   })
 );
-
-// Body Parser
-app.use(express.json());
 
 // Body Parser (MUST come before routes)
 app.use(express.json());
